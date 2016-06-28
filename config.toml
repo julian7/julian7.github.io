@@ -15,7 +15,7 @@ DateForm = "Mon, Jan 2, 2006"
 Description = "Jul's blog"
 Author = "Balazs Nagy"
 email = "julsevern@gmail.com"
-#Ganalytics = "XX-00000000-0"
+Ganalytics = "UA-9690247-6"
 
 [[params.social]]
 title = "twitter"
