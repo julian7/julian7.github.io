@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>A Good Plan for building containers -- Operation 500-pound Parakeet</title>
+
+    
+
+    
+    <link href="https://julian7.github.io//css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="https://julian7.github.io//css/clean-blog.min.css" rel="stylesheet">
+
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    
+    
+    
+
+</head>
+
+<body>
+
+    
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://julian7.github.io/">Operation 500-pound Parakeet</a>
+            </div>
+
+                       
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li>
+                        <a href="https://julian7.github.io/">home</a>
+                    </li>
+                    
+                  </ul>
+            </div>
+           
+
+        </div>
+        
+    </nav>
+
+
+    
+    
+    <header class="intro-header" style="background-image: url('https://julian7.github.io//img/post-bg.jpg')">
+    
+      <div class="container">
+        <div class="row">
+           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+             <div class="post-heading">
+               <h1>A Good Plan for building containers</h1>
+               <h2 class="subheading"></h2>
+               <span class="meta">Posted by <a href="#">Balazs Nagy</a> on Tue, Jun 28, 2016
+                 <br />
+                 In 
+
+                 <br />
+                 Tags <a href="https://julian7.github.io/tags/docker" >docker</a> <a href="https://julian7.github.io/tags/continuous-delivery" >continuous delivery</a> 
+
+               </span>
+             </div>
+           </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  
+
+<p>I&rsquo;m building docker containers. I&rsquo;ve built a couple already: GitLab CE, PowerDNS, TeamSpeak3, Youtrack, Perforce (it&rsquo;s called Helix Versioning Engine nowadays), and Goiardi.</p>
+
+<p>I&rsquo;m not totally happy with building images though.</p>
+
+<p>Building a docker image creates a lot of layers, for, hmm, <em>nothing in particular</em>. However, It also creates a lot of hidden dependencies, like keeping build dependencies in runtime. It can be worse though: when a new layer removes build dependencies. It&rsquo;s not there, yet you have to download it.</p>
+
+<p>A lot of Dockerfiles start with downloading <code>curl</code> or <code>wget</code> to fetch dependencies. They don&rsquo;t check downloaded files&rsquo; integrity. Sometimes they get rid of the downloader utilities though, usually as a new layer.</p>
+
+<p>Dockerfile has no notion for tagging, uploading, versioning, even though it keeps track of all input versions.</p>
+
+<p>I even went on writing my not so difficult dockerfile builder to handle artifacts, files, and templating separately.</p>
+
+<p>However, what I really wanted is a separate build environment.</p>
+
+<h2 id="enter-habitat">Enter Habitat</h2>
+
+<p><a href="https://twitter.com/adamhjk">Adam Jacob</a> felt the same pain, and he took a more drastic approach: he started building Habitat, which takes the care of building, distributing, configuring, managing, and clustering completely independent applications.</p>
+
+<h3 id="building-by-the-plan">Building by the plan</h3>
+
+<p>Habitat does all the build in a separated environment called Studio. It allows you to download, check integrity, unpack, compile, and install artifacts. It handles dependencies for both build and run time, and allows you to template configurations. Output name and version is also well defined.</p>
+
+<p>This all goes to a plan. A well-defined, versionable, easy to understand plan.</p>
+
+<h3 id="create-invent-make-a-mess">Create, Invent, Make a mess</h3>
+
+<p>The fact Studio runs in a docker instance has other benefits. Your plan directory is mounted as <code>/src</code> in Studio, so you can use your favorite editor, while you can <del>rise entropy level</del> explore through the build process. If you feel you&rsquo;ve blown everything up, just throw the old Studio away, and create a new one.</p>
+
+<h3 id="slim-results">Slim results</h3>
+
+<p>In Docker, it doesn&rsquo;t really matter which OS you&rsquo;re using on the desktop, so you can use which you&rsquo;re the most comfortable with (think of Docker for Windows / Docker for Mac). Then, you can choose another OS at server side. I mean a linux distro&rsquo;s tooling.</p>
+
+<p>Habitat breaks these rules: why do you need an OS if you don&rsquo;t use it? Habitat takes care of all dependencies, starting from GLIBC to unix commands, interpreters. Just what&rsquo;s needed, and nothing else.</p>
+
+<p>When you build a docker image of a Habitat package, it adds a very slim layer of linux tools though: a busybox image. Results are very small. My goiardi docker instance is 174MB (as a comparison, my ubuntu-based docker instance is 354MB, executable is 16MB, all the others are dependencies: glibc, gcc-libs, and openssl take 135MB).</p>
+
+<h3 id="manage-configurations">Manage configurations</h3>
+
+<p>Templates allow us to fine-tune configurations. It allows modifying configs at start time, at run time, when clustering changes, when bound services change. Everything is handled by the Supervisor, which monitors our applications.</p>
+
+<p>Nothing is hidden though: clustering and bindings have to be added to the templates. Hooks can handle events like files uploaded, reconfiguration, even inquiring health checks.</p>
+
+<h3 id="gives-way-to-orchestration-systems">Gives way to orchestration systems</h3>
+
+<p>While Habitat has tight control on configuration and service discovery, it is also polite enough not to mess with scheduling, volume management, and other tasks. There are very good products which solve these issues very well. It is also not descriptive: you can run a habitat package directly, or using Mesos, or using a Docker / ACI scheduler.</p>
+
+<p>I&rsquo;m excited. It fixes problems I feel myself, with a level of purity and elegance I admire. I&rsquo;m looking forward publishing my plans.</p>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+    
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  <ul class="list-inline text-center">
+                    <li>
+                      <a href="mailto:julsevern@gmail.com">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://twitter.com/julsevern">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li>
+                      <a href="https://github.com/julian7">
+                        <span class="fa-stack fa-lg">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                  <p class="copyright text-muted">All articless written by Balazs Nagy. I might not share the viewpoints of my employer.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <script src="https://julian7.github.io//js/jquery.min.js"></script>
+
+    
+    <script src="https://julian7.github.io//js/bootstrap.min.js"></script>
+
+    
+    <script src="https://julian7.github.io//js/clean-blog.js"></script>
+
+    
+
+</body>
+
+</html>
+
