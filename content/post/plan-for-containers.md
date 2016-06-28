@@ -1,6 +1,6 @@
 +++
 date = "2016-06-28T09:29:41+02:00"
-draft = true
+draft = false
 title = "A Good Plan for building containers"
 tags = ["docker", "continuous delivery"]
 
@@ -37,9 +37,9 @@ The fact Studio runs in a docker instance has other benefits. Your plan director
 
 In Docker, it doesn't really matter which OS you're using on the desktop, so you can use which you're the most comfortable with (think of Docker for Windows / Docker for Mac). Then, you can choose another OS at server side. I mean a linux distro's tooling.
 
-Habitat breaks these rules: why do you need an OS if you don't use it? Habitat takes care of all dependencies, starting from GLIBC to unix commands, interpreters. Just what's needed, and nothing else. It also edits executables, to use exact library versions.
+Habitat breaks these rules: why do you need an OS if you don't use it? Habitat takes care of all dependencies, starting from GLIBC to unix commands, interpreters. Just what's needed, and nothing else.
 
-When you build a docker image of a Habitat package, it adds a very slim layer of linux tools though, a busybox image. Results are very small. My goiardi docker instance is 174MB (as a comparison, my ubuntu-based docker instance is 354MB, executable is 16MB, the habitat package file is 3.2MB). This is not that bad, given glibc, gcc-libs, and openssl take 135MB.
+When you build a docker image of a Habitat package, it adds a very slim layer of linux tools though: a busybox image. Results are very small. My goiardi docker instance is 174MB (as a comparison, my ubuntu-based docker instance is 354MB, executable is 16MB, all the others are dependencies: glibc, gcc-libs, and openssl take 135MB).
 
 ### Manage configurations
 
