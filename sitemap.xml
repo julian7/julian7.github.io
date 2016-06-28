@@ -2,13 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://replace-this-with-your-hugo-site.com/</loc>
-    <lastmod>2016-06-28T09:29:41+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://replace-this-with-your-hugo-site.com/post/plan-for-goiardi/</loc>
-    <lastmod>2016-06-28T09:29:41+02:00</lastmod>
+    <loc>https://julian7.github.io/</loc>
   </url>
   
 </urlset>
