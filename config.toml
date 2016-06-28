@@ -1,0 +1,31 @@
+baseurl = "http://replace-this-with-your-hugo-site.com/"
+languageCode = "en-us"
+title = "Operation 500-pound Parakeet"
+canonifyurls = true
+paginate = 10
+theme = "startbootstrap-clean-blog"
+copyright = "All articless written by Balazs Nagy. I might not share the viewpoints of my employer."
+
+[author]
+name = 'Balazs Nagy'
+
+[params]
+DateForm = "Mon, Jan 2, 2006"
+Description = "Jul's blog"
+Author = "Balazs Nagy"
+email = "julsevern@gmail.com"
+disqusShortname = "js-hu"
+#Ganalytics = "XX-00000000-0"
+
+[[params.social]]
+title = "twitter"
+url = "https://twitter.com/julsevern"
+
+[[params.social]]
+title = "github"
+url = "https://github.com/julian7"
+
+[[menu.main]]
+name = "home"
+url = "/"
+weight = -200
