@@ -21,7 +21,7 @@ However, what I really wanted is a separate build environment.
 
 ## Enter Habitat
 
-[Adam Jacob](https://twitter.com/adamhjk) felt the same pain, and he took a more drastic approach: he started building Habitat, which takes the care of building, distributing, configuring, managing, and clustering completely independent applications.
+[Adam Jacob](https://twitter.com/adamhjk) felt the same pain, and he took a more drastic approach: he started building [Habitat](https://www.habitat.sh/), which takes the care of building, distributing, configuring, managing, and clustering completely independent applications.
 
 ### Building by the plan
 
