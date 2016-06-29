@@ -7,8 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All articless written by Balazs Nagy. I might not share the viewpoints of my employer.</copyright>
-    <lastBuildDate>Tue, 28 Jun 2016 09:29:41 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 29 Jun 2016 13:07:35 +0200</lastBuildDate>
     <atom:link href="https://julian7.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>julian7</title>
+      <link>https://julian7.github.io/about/julian7/</link>
+      <pubDate>Wed, 29 Jun 2016 13:07:35 +0200</pubDate>
+      
+      <guid>https://julian7.github.io/about/julian7/</guid>
+      <description>&lt;p&gt;Hi, my name is Balázs Nagy. My old-time nick is Julian, and I earned the surname Severn (with the abbreviation &lt;em&gt;7&lt;/em&gt;) back in my &lt;a href=&#34;https://en.wikipedia.org/wiki/ZX_Spectrum&#34;&gt;ZX Spectrum&lt;/a&gt; days. A big shootout to Andy Severn (a.k.a. &amp;amp;e7), who did amazing things back then, and has an awesome nick.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m an SCM Architect by trade, also software craftsmanship, devops, and distributed version control systems advocate, and part-time Rails app developer.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>A Good Plan for building containers</title>
