@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://julian7.github.io/</loc>
-    <lastmod>2016-06-29T13:07:35+02:00</lastmod>
+    <loc>https://julian7.github.io/post/on-version-numbers/</loc>
+    <lastmod>2018-08-06T12:37:47+02:00</lastmod>
   </url>
   
   <url>
@@ -14,6 +15,59 @@
   <url>
     <loc>https://julian7.github.io/post/plan-for-containers/</loc>
     <lastmod>2016-06-28T09:29:41+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/about/</loc>
+    <lastmod>2016-06-29T13:07:35+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/tags/continuous-delivery/</loc>
+    <lastmod>2016-06-28T09:29:41+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/tags/docker/</loc>
+    <lastmod>2016-06-28T09:29:41+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/</loc>
+    <lastmod>2018-08-06T12:37:47+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/post/</loc>
+    <lastmod>2018-08-06T12:37:47+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/tags/semver/</loc>
+    <lastmod>2018-08-06T12:37:47+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/tags/software-architecture/</loc>
+    <lastmod>2018-08-06T12:37:47+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://julian7.github.io/tags/</loc>
+    <lastmod>2016-06-28T09:29:41+02:00</lastmod>
+    <priority>0</priority>
   </url>
   
 </urlset>

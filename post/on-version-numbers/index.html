@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>A Good Plan for building containers -- Operation 500-pound Parakeet</title>
+    <title>On Version Numbers -- Operation 500-pound Parakeet</title>
 
     
 
@@ -71,14 +71,14 @@
         <div class="row">
            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
              <div class="post-heading">
-               <h1>A Good Plan for building containers</h1>
+               <h1>On Version Numbers</h1>
                <h2 class="subheading"></h2>
-               <span class="meta">Posted by <a href="#">Balazs Nagy</a> on Tue, Jun 28, 2016
+               <span class="meta">Posted by <a href="#">Balazs Nagy</a> on Mon, Aug 6, 2018
                  <br />
                  In 
 
                  <br />
-                 Tags <a href="https://julian7.github.io/tags/docker" >docker</a> <a href="https://julian7.github.io/tags/continuous-delivery" >continuous delivery</a> 
+                 Tags <a href="https://julian7.github.io/tags/semver" >semver</a> <a href="https://julian7.github.io/tags/software-architecture" >software architecture</a> 
 
                </span>
              </div>
@@ -94,53 +94,87 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                   
 
-<p>I&rsquo;m building docker containers. I&rsquo;ve built a couple already: GitLab CE, PowerDNS, TeamSpeak3, Youtrack, Perforce (it&rsquo;s called Helix Versioning Engine nowadays), and Goiardi.</p>
+<p>The other day I got a question from a principal software architect: can they open a single Merge Request (Pull Request in GitHub terms) for multiple git repositories?</p>
 
-<p>I&rsquo;m not totally happy with building images though.</p>
+<p>He drew two scenarios:</p>
 
-<p>Building a docker image creates a lot of layers, for, hmm, <em>nothing in particular</em>. However, It also creates a lot of hidden dependencies, like keeping build dependencies in runtime. It can be worse though: when a new layer removes build dependencies. It&rsquo;s not there, yet you have to download it.</p>
+<ol>
+<li>When they have a fundamental change in their gradle configs, they have to change in every repository</li>
+<li>If there is an API change, they have to modify the code at multiple places at the same time.</li>
+</ol>
 
-<p>A lot of Dockerfiles start with downloading <code>curl</code> or <code>wget</code> to fetch dependencies. They don&rsquo;t check downloaded files&rsquo; integrity. Sometimes they get rid of the downloader utilities though, usually as a new layer.</p>
+<p>This is a very large repo coming from ClearCase, and it compiles for several hours. It provides several executables, which should be run on different machines. A real legacy system.</p>
 
-<p>Dockerfile has no notion for tagging, uploading, versioning, even though it keeps track of all input versions.</p>
+<p>They have already done heroic efforts to separate components, but interdependency is still very high.</p>
 
-<p>I even went on writing my not so difficult dockerfile builder to handle artifacts, files, and templating separately.</p>
+<h2 id="bad-news">Bad news</h2>
 
-<p>However, what I really wanted is a separate build environment.</p>
+<p>Obviously, it is not possible what they want. Or, to be more precise, what they think they want.</p>
 
-<h2 id="enter-habitat">Enter Habitat</h2>
+<p>I think what they need, is proper versioning, and better interoperability. They won’t be able to save on the number of merge requests, for sure. However, leveraging good practices with a proper versioning system can turn the tables.</p>
 
-<p><a href="https://twitter.com/adamhjk">Adam Jacob</a> felt the same pain, and he took a more drastic approach: he started building <a href="https://www.habitat.sh/">Habitat</a>, which takes the care of building, distributing, configuring, managing, and clustering completely independent applications.</p>
+<h2 id="semantic-versioning">Semantic versioning</h2>
 
-<h3 id="building-by-the-plan">Building by the plan</h3>
+<p>Versioning is easy: there are tree to five identifiers:</p>
 
-<p>Habitat does all the build in a separated environment called Studio. It allows you to download, check integrity, unpack, compile, and install artifacts. It handles dependencies for both build and run time, and allows you to template configurations. Output name and version is also well defined.</p>
+<ul>
+<li>MAJOR version: increment when there are incompatible API changes</li>
+<li>MINOR version: increment when adding functionality in a backwards-compatible manner</li>
+<li>PATCH version: increment when fixing bugs in a backwards-compatible manner</li>
+<li>Pre-release: optional, denoting a pre-release version</li>
+<li>Build metadata: optional, add metadata version number</li>
+</ul>
 
-<p>This all goes to a plan. A well-defined, versionable, easy to understand plan.</p>
+<p>Example: 2.0.0-1.3.9+20130313144700: it can be a pre-release of 2.0.0, based on 1.3.9, with bundled metadata released on March 13, 2013, at 2:47 PM UTC.</p>
 
-<h3 id="create-invent-make-a-mess">Create, Invent, Make a mess</h3>
+<p>It is well documented at <a href="http://semver.org">http://semver.org</a>.</p>
 
-<p>The fact Studio runs in a docker instance has other benefits. Your plan directory is mounted as <code>/src</code> in Studio, so you can use your favorite editor, while you can <del>rise entropy level</del> explore through the build process. If you feel you&rsquo;ve blown everything up, just throw the old Studio away, and create a new one.</p>
+<p>However, by learning from Lean principles (this time, one specific principle: limit work in progress), instead of jumping into implementing incompatible changes, take a less invasive method.</p>
 
-<h3 id="slim-results">Slim results</h3>
+<h2 id="api-versioning-and-deprecations">API versioning and deprecations</h2>
 
-<p>In Docker, it doesn&rsquo;t really matter which OS you&rsquo;re using on the desktop, so you can use which you&rsquo;re the most comfortable with (think of Docker for Windows / Docker for Mac). Then, you can choose another OS at server side. I mean a linux distro&rsquo;s tooling.</p>
+<p>This makes versioning a bit more interesting: if there is a need for change in the API, one should add a new one with extended functionality, and should mark the old one deprecated:</p>
 
-<p>Habitat breaks these rules: why do you need an OS if you don&rsquo;t use it? Habitat takes care of all dependencies, starting from GLIBC to unix commands, interpreters. Just what&rsquo;s needed, and nothing else.</p>
+<pre><code class="language-ruby">## send announcement to users
+def send_colored_announcement_to_users(users, message, color)
+  users.each do |user|
+    user.send_announcement(message, color)
+  end
+end
 
-<p>When you build a docker image of a Habitat package, it adds a very slim layer of linux tools though: a busybox image. Results are very small. My goiardi docker instance is 174MB (as a comparison, my ubuntu-based docker instance is 354MB, executable is 16MB, all the others are dependencies: glibc, gcc-libs, and openssl take 135MB).</p>
+## send announcement to users
+### deprecated
+def send_announcement_to_users(users, message)
+  deprecated_call(‘send_color_announcement_to_users’)
+  send_color_announcement_to_users(users, message, ‘black’)
+end
+</code></pre>
 
-<h3 id="manage-configurations">Manage configurations</h3>
+<p>There are a lot of options: add version numbers to the API call’s name, use a (slightly) different name, but one thing is common: when an old API endpoint is extended, deprecate it.</p>
 
-<p>Templates allow us to fine-tune configurations. It allows modifying configs at start time, at run time, when clustering changes, when bound services change. Everything is handled by the Supervisor, which monitors our applications.</p>
+<p>Then, it can be consumed at multiple levels: static code analysis (which can feed upon inline documentation’s deprecation notices), or logging deprecation warnings during testing.</p>
 
-<p>Nothing is hidden though: clustering and bindings have to be added to the templates. Hooks can handle events like files uploaded, reconfiguration, even inquiring health checks.</p>
+<h2 id="identifying-and-deleting-dead-code">Identifying and deleting dead code</h2>
 
-<h3 id="gives-way-to-orchestration-systems">Gives way to orchestration systems</h3>
+<p>Test runs can count the number of deprecation calls, to show whether we are ready for a version upgrade.</p>
 
-<p>While Habitat has tight control on configuration and service discovery, it is also polite enough not to mess with scheduling, volume management, and other tasks. There are very good products which solve these issues very well. It is also not descriptive: you can run a habitat package directly, or using Mesos, or using a Docker / ACI scheduler.</p>
+<p>If we do this faithfully, a new major version is just the removal of deprecated code. If you don’t get any deprecation errors using the old version, it’s safe to say you can use the new major version.</p>
 
-<p>I&rsquo;m excited. It fixes problems I feel myself, with a level of purity and elegance I admire. I&rsquo;m looking forward publishing my plans.</p>
+<h2 id="i-understand-it-s-a-steam-engine-but-how-does-it-work">I understand it’s a steam engine, but how does it work?</h2>
+
+<p>This all work nice in theory, but there are a lot of missing pieces you have to put in place:</p>
+
+<ul>
+<li>Tracking outdated versions: if a dependency upgrades, how can we say it’s safe (let alone possible) to upgrade?</li>
+<li>Enforcing upgrades: how can we get modules to upgrade?</li>
+<li>Is there a way to use multiple versions in a single build output? If there are multiple version requirements for different parts of the same executable, odds are only one can be built in.</li>
+<li>How to set up a development strategy for subcomponents? When there are multiple consumers, it’s often not enough to directly modify the code (let’s call it tactical changes), but it might require a higher goal, a strategy.</li>
+<li>What to collect in deprecation measurement? With multiple modules, it’s often a good idea to collect module names, deprecated and suggested call names, and at least the version name, from when the deprecation took place, to be collected.</li>
+</ul>
+
+<p>Then, if the compiler allows it, it can be a good idea to build a pre-version of the code automatically. This way we can predict whether dependent modules are ready for the upgrade.</p>
+
+<p>Obviously, it doesn’t save us a lot of MRs being opened, but it makes each MR being independent of each other, and also uncovers a lot of yet invisible work of integration.</p>
 
                 </div>
             </div>

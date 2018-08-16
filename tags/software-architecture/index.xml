@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Operation 500-pound Parakeet</title>
-    <link>https://julian7.github.io/post/</link>
-    <description>Recent content in Posts on Operation 500-pound Parakeet</description>
+    <title>Software Architecture on Operation 500-pound Parakeet</title>
+    <link>https://julian7.github.io/tags/software-architecture/</link>
+    <description>Recent content in Software Architecture on Operation 500-pound Parakeet</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All articless written by Balazs Nagy. I might not share the viewpoints of my employer.</copyright>
     <lastBuildDate>Mon, 06 Aug 2018 12:37:47 +0200</lastBuildDate>
     
-	<atom:link href="https://julian7.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://julian7.github.io/tags/software-architecture/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,17 +21,6 @@
       <description>The other day I got a question from a principal software architect: can they open a single Merge Request (Pull Request in GitHub terms) for multiple git repositories?
 He drew two scenarios:
  When they have a fundamental change in their gradle configs, they have to change in every repository If there is an API change, they have to modify the code at multiple places at the same time.  This is a very large repo coming from ClearCase, and it compiles for several hours.</description>
-    </item>
-    
-    <item>
-      <title>A Good Plan for building containers</title>
-      <link>https://julian7.github.io/post/plan-for-containers/</link>
-      <pubDate>Tue, 28 Jun 2016 09:29:41 +0200</pubDate>
-      
-      <guid>https://julian7.github.io/post/plan-for-containers/</guid>
-      <description>I&amp;rsquo;m building docker containers. I&amp;rsquo;ve built a couple already: GitLab CE, PowerDNS, TeamSpeak3, Youtrack, Perforce (it&amp;rsquo;s called Helix Versioning Engine nowadays), and Goiardi.
-I&amp;rsquo;m not totally happy with building images though.
-Building a docker image creates a lot of layers, for, hmm, nothing in particular. However, It also creates a lot of hidden dependencies, like keeping build dependencies in runtime. It can be worse though: when a new layer removes build dependencies.</description>
     </item>
     
   </channel>

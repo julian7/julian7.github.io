@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Operation 500-pound Parakeet</title>
+    <link>https://julian7.github.io/tags/</link>
+    <description>Recent content in Tags on Operation 500-pound Parakeet</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All articless written by Balazs Nagy. I might not share the viewpoints of my employer.</copyright>
+    <lastBuildDate>Tue, 28 Jun 2016 09:29:41 +0200</lastBuildDate>
+    
+	<atom:link href="https://julian7.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Continuous Delivery</title>
+      <link>https://julian7.github.io/tags/continuous-delivery/</link>
+      <pubDate>Tue, 28 Jun 2016 09:29:41 +0200</pubDate>
+      
+      <guid>https://julian7.github.io/tags/continuous-delivery/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://julian7.github.io/tags/docker/</link>
+      <pubDate>Tue, 28 Jun 2016 09:29:41 +0200</pubDate>
+      
+      <guid>https://julian7.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Semver</title>
+      <link>https://julian7.github.io/tags/semver/</link>
+      <pubDate>Mon, 06 Aug 2018 12:37:47 +0200</pubDate>
+      
+      <guid>https://julian7.github.io/tags/semver/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Software Architecture</title>
+      <link>https://julian7.github.io/tags/software-architecture/</link>
+      <pubDate>Mon, 06 Aug 2018 12:37:47 +0200</pubDate>
+      
+      <guid>https://julian7.github.io/tags/software-architecture/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
